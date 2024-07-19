@@ -1,3 +1,9 @@
 mplfinance
 shioaji
 ta
+streamlit
+pandas
+numpy
+matplotlib
+plotly
+
