@@ -134,14 +134,25 @@ fig_volume.update_layout(
 # 在 Streamlit 中显示成交量图表
 st.plotly_chart(fig_volume)
 
-# 计算MACD
+# 计算 MACD
 def calculate_macd(df, fastperiod=12, slowperiod=26, signalperiod=9):
-    df['MACD'], df['MACD_Signal'], df['MACD_Hist'] = talib.MACD(df['Close'], fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)
+    macd = ta.trend.MACD(df['Close'], window_slow=slowperiod, window_fast=fastperiod, window_sign=signalperiod)
+    df['MACD'] = macd.macd()
+    df['MACD_Signal'] = macd.macd_signal()
+    df['MACD_Hist'] = macd.macd_diff()
     return df
 
-# 计算KD指标
+# 计算 KD 指标
 def calculate_kd(df, fastk_period=9, slowk_period=3, slowd_period=3):
-    df['K'], df['D'] = talib.STOCH(df['High'], df['Low'], df['Close'], fastk_period=fastk_period, slowk_period=slowk_period, slowd_period=slowd_period)
+    stoch = ta.momentum.StochasticOscillator(
+        high=df['High'],
+        low=df['Low'],
+        close=df['Close'],
+        window=fastk_period,
+        smooth_window=slowk_period
+    )
+    df['K'] = stoch.stoch()
+    df['D'] = stoch.stoch_signal()
     return df
 
 # 如果daily_df中有数据，才计算MACD指标
