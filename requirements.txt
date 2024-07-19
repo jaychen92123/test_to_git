@@ -6,4 +6,4 @@ pandas
 numpy
 matplotlib
 plotly
-TA-Lib
+ta-lib==0.4.0
